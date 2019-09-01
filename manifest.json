@@ -1,0 +1,96 @@
+{
+  "Actions": [
+    {
+        "Icon": "Images/shotIcon",
+        "Name": "Shot",
+        "PropertyInspectorPath": "propertyInspector.html",
+        "States": [
+            {
+                "Image": "Images/layer1",
+                "TitleColor": "white",
+                "TitleAlignment": "bottom",
+                "FontFamily": "Arial",
+                "FontStyle": "Bold",
+                "FontSize": "13"
+            }
+        ],
+        "SupportedInMultiActions": true,
+        "Tooltip": "This action allows you to select a shot in the Wirecast application via a few methods.",
+        "UUID": "net.telestream.wirecast.shot"
+    },
+    {
+      "Icon": "Images/goIcon",
+      "Name": "Go",
+      "States": [
+        {
+          "Image": "Images/goImage",
+          "TitleAlignment": "middle",
+          "FontSize": "17"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "This action initiates 'Go' in the Wirecast application",
+      "UUID": "net.telestream.wirecast.go"
+    },
+    {
+      "Icon": "Images/broadcastIcon",
+      "Name": "Stream",
+      "States": [
+        {
+          "Image": "Images/broadcastImageOFF",
+          "TitleAlignment": "middle",
+          "FontSize": "17"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "This action initiates 'Stream' in the Wirecast application",
+      "UUID": "net.telestream.wirecast.broadcast"
+    },
+    {
+      "Icon": "Images/recordIcon",
+      "Name": "Record",
+      "States": [
+        {
+          "Image": "Images/recordImageOFF",
+          "TitleAlignment": "middle",
+          "FontSize": "17"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "This action initiates 'Record' in the Wirecast application",
+      "UUID": "net.telestream.wirecast.record"
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "Telestream, Inc.",
+  "CodePathWin": "Executables/sd-wirecast.exe",
+  "CodePathMac": "Executables/sd-wirecast",
+  "Description": "Use your Stream Deck as a control surface for Wirecast.",
+  "Name": "Wirecast Plugin",
+  "Icon": "Images/wirecastPluginIcon",
+  "URL": "https://www.telestream.net",
+  "Category": "Wirecast",
+  "CategoryIcon": "Images/wirecastLogo",
+  "Version": "0.9",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "4.1"
+  },
+  "ApplicationsToMonitor": {
+    "mac": [
+      "net.telestream.wirecast"
+    ],
+    "windows": [
+      "Wirecast.exe"
+    ]
+  }
+}

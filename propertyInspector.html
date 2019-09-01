@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <title>Wirecast: Shot Property Inspector</title>
+        <meta charset="utf-8" />
+        <!-- Need to fix so that caret.svg arrow shows up**** -->
+        <link rel="stylesheet" href="sdpi.css">
+    </head>
+    
+    <body id="body">
+        <div class="sdpi-wrapper">
+            <div type="select" class="sdpi-item">
+                <div class="sdpi-item-label">Mode</div>
+                <select class="sdpi-item-value" id="mode"
+                    onchange="changeMode(event.target.value)">
+					<option value="automatic">By Grid Position</option>
+                    <option value="layerAndIndex">By Index</option>
+                    <option value="name">By Name</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="auto_msg">
+            <div class="message">
+                <h4>Information:</h4>
+                <p id="msg_txt"></p>
+                <p>This is based on the position in the Stream Deck grid.</p>
+            </div>
+        </div>
+
+        <div class="sdpi-wrapper" id="layer_list">
+            <div type="select" class="sdpi-item">
+                <div class="sdpi-item-label">Master Layer</div>
+                <select class="sdpi-item-value" id="layer"
+                    onchange="sendValueToPlugin(event.target.value, 'layer')"; >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="sdpi-wrapper" id="index_list">
+            <div type="select" class="sdpi-item">
+                <div class="sdpi-item-label">Shot Index</div>
+                <select class="sdpi-item-value" id="index"
+                    onchange="sendValueToPlugin(event.target.value, 'index')">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="0">Clear Layer</option>
+                </select>
+            </div>
+        </div>
+		
+        <div class="sdpi-wrapper"  id="name_text">
+            <div type="textarea" class="sdpi-item">
+                <div class="sdpi-item-label">Shot Name</div>
+                <span class="sdpi-item-value">
+                    <input type="text"  id="shot-name" onkeyup="sendNameToPlugin()" ></input>
+                </span>
+            </div>
+        </div>
+        
+        <script>
+            
+            //get global variables for elements
+            textElement = document.getElementById("name_text");
+            layerElement = document.getElementById("layer_list");
+            indexElement = document.getElementById("index_list");
+            messageElement = document.getElementById("auto_msg");
+            //default mode: by grid pos --> hide other elements
+            messageElement.style.display = "block";
+            layerElement.style.display = "none";
+            indexElement.style.display = "none";
+            textElement.style.display = "none";
+
+            function changeMode(newMode){
+                switch (newMode){
+                    case "name":
+                    layerElement.style.display = "none";
+                    indexElement.style.display = "none";
+                    messageElement.style.display = "none";
+                    textElement.style.display = "block";
+                    break;
+                    case "layerAndIndex":
+                    textElement.style.display = "none";
+                    messageElement.style.display = "none";
+                    layerElement.style.display = "block";
+                    indexElement.style.display = "block";
+                    break;
+                    case "automatic":
+                    textElement.style.display = "none";
+                    layerElement.style.display = "none";
+                    indexElement.style.display = "none";
+                    messageElement.style.display = "block";
+                    break;
+                }
+                //send new mode to plugin
+                sendValueToPlugin(newMode, "mode");
+            }
+        
+        </script>
+        
+        <script src="propertyInspector.js"></script>
+      
+    </body>
+    
+</html>
+
