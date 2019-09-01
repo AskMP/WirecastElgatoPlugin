@@ -4,119 +4,127 @@
     <head>
         <title>Wirecast: Shot Property Inspector</title>
         <meta charset="utf-8" />
-        <!-- Need to fix so that caret.svg arrow shows up**** -->
         <link rel="stylesheet" href="sdpi.css">
+        <style>
+            ::-webkit-calendar-picker-indicator:focus,
+            input[type=file]::-webkit-file-upload-button:focus,
+            button:focus,
+            textarea:focus,
+            input:focus,
+            select:focus,
+            option:focus,
+            details:focus,
+            summary:focus,
+            .custom-select select {
+                /*
+                * I know they make outline to none in their demo but it is
+                * VERY bad practice to do so. I would suggest simply making
+                * this a Wirecast brand colour. #A11y
+                */
+                outline: 1px solid goldenrod;
+            }
+            /* Only 2 overrides that are not in the original CSS */
+            section { display: none; }
+            .active { display: block; }
+        </style>
     </head>
     
     <body id="body">
-        <div class="sdpi-wrapper">
-            <div type="select" class="sdpi-item">
+        <!--
+            The primary change I made was to group elements within sections
+            which compartmentalize the pieces and lets them be controlled
+            via CSS without worrying about managing multiple classes. We
+            just use an "activate" class to make it viewable.
+         -->
+        <section id="modeSelector">
+            <div class="sdpi-item">
                 <div class="sdpi-item-label">Mode</div>
-                <select class="sdpi-item-value" id="mode"
-                    onchange="changeMode(event.target.value)">
-					<option value="automatic">By Grid Position</option>
-                    <option value="layerAndIndex">By Index</option>
-                    <option value="name">By Name</option>
+                <select class="sdpi-item-value" id="mode">
+					<option value="0">By Grid Position</option>
+                    <option value="1">By Index</option>
+                    <option value="2">By Name</option>
                 </select>
             </div>
-        </div>
+        </section>
 
-        <div class="sdpi-item" id="auto_msg">
-            <div class="message">
-                <h4>Information:</h4>
-                <p id="msg_txt"></p>
-                <p>This is based on the position in the Stream Deck grid.</p>
+        <section id="byGrid" data-mode="automatic">
+            <div class="sdpi-item">
+                <div class="message">
+                    <h4>Information:</h4>
+                    <p id="msg_txt"></p>
+                    <p>This is based on the position in the Stream Deck grid.</p>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="sdpi-wrapper" id="layer_list">
-            <div type="select" class="sdpi-item">
-                <div class="sdpi-item-label">Master Layer</div>
-                <select class="sdpi-item-value" id="layer"
-                    onchange="sendValueToPlugin(event.target.value, 'layer')"; >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+        <!--
+            Because you have multple sdpi wrapper element values, we group
+            both of thes inputs into the same section allowing show/hiding them
+            easier to manage. 
+         -->
+        <section id="byIndex" data-mode="layerAndIndex">
+            <div class="sdpi-wrapper">
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Master Layer</div>
+                    <!--
+                        You'll note that there is a dataset added to the input
+                        fields, this is done to assign it dynmically. Granted
+                        you're not benefitting from it in this case but if you
+                        were to have multiple sections that needed to update
+                        the same value, this allows for that type of functionality.
+                    -->
+                    <select class="sdpi-item-value" data-attribute="layer"> 
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        
-        <div class="sdpi-wrapper" id="index_list">
-            <div type="select" class="sdpi-item">
-                <div class="sdpi-item-label">Shot Index</div>
-                <select class="sdpi-item-value" id="index"
-                    onchange="sendValueToPlugin(event.target.value, 'index')">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="0">Clear Layer</option>
-                </select>
-            </div>
-        </div>
-		
-        <div class="sdpi-wrapper"  id="name_text">
-            <div type="textarea" class="sdpi-item">
-                <div class="sdpi-item-label">Shot Name</div>
-                <span class="sdpi-item-value">
-                    <input type="text"  id="shot-name" onkeyup="sendNameToPlugin()" ></input>
-                </span>
-            </div>
-        </div>
-        
-        <script>
             
-            //get global variables for elements
-            textElement = document.getElementById("name_text");
-            layerElement = document.getElementById("layer_list");
-            indexElement = document.getElementById("index_list");
-            messageElement = document.getElementById("auto_msg");
-            //default mode: by grid pos --> hide other elements
-            messageElement.style.display = "block";
-            layerElement.style.display = "none";
-            indexElement.style.display = "none";
-            textElement.style.display = "none";
+            <div class="sdpi-wrapper">
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Shot Index</div>
+                    <!-- 
+                        The shot index has been changed to be a numeral value 
+                        rather than a popup select box. This should allow for
+                        access to however many shots a user has on a layer
+                        so long as you've built it into the plugin side of this.
+                        Note: the value is minimizing at 0 which you ALREADY have
+                        as flagging to be clear so that worked out really nicely!
+                     -->
+                    <input class="sdpi-item-value" type="number" min="0" max="255" value="0" step="1" data-attribute="index" />
+                </div>
+            </div>
+        </section>
+            
+        <section id="byName" data-mode="name">
+            <div class="sdpi-wrapper" class="sdpi-item">
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Shot Name</div>
+                    <input class="sdpi-item-value" type="text" id="shot-name" data-attribute="name"></input>
+                </div>
+            </div>
+        </section>
+        <script src="propertyInspector.class.js"></script>
+        <script>
+            /***
+             * The big change here is that we're swithing to using an instance
+             * of a class rather than simply setting up functions. You can find
+             * more details in the class file.
+             */
+            let WirecastInspector = new PropertyInspector();
 
-            function changeMode(newMode){
-                switch (newMode){
-                    case "name":
-                    layerElement.style.display = "none";
-                    indexElement.style.display = "none";
-                    messageElement.style.display = "none";
-                    textElement.style.display = "block";
-                    break;
-                    case "layerAndIndex":
-                    textElement.style.display = "none";
-                    messageElement.style.display = "none";
-                    layerElement.style.display = "block";
-                    indexElement.style.display = "block";
-                    break;
-                    case "automatic":
-                    textElement.style.display = "none";
-                    layerElement.style.display = "none";
-                    indexElement.style.display = "none";
-                    messageElement.style.display = "block";
-                    break;
-                }
-                //send new mode to plugin
-                sendValueToPlugin(newMode, "mode");
-            }
-        
+            /***
+             * On top of the new class, we do however need to set a connection
+             * function that Stream Deck uses to instantiate the websocket.
+             * We simply add the connector here to make it easier to read.
+             */
+            const connectElgatoStreamDeckSocket = (port, uuid, regEvent, incomingInfo, info) => {
+                WirecastInspector.connect(port, uuid, regEvent, incomingInfo, info);
+            };
         </script>
-        
-        <script src="propertyInspector.js"></script>
-      
     </body>
     
 </html>
-
