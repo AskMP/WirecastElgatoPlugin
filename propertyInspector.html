@@ -72,13 +72,17 @@
                         you're not benefitting from it in this case but if you
                         were to have multiple sections that needed to update
                         the same value, this allows for that type of functionality.
+
+                        Also, interesting that this doesn't use the layer index,
+                        rather a string value. I believe it is due to how the
+                        scripting language handles the layer association though.
                     -->
                     <select class="sdpi-item-value" data-attribute="layer"> 
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        <option value="1">Layer 1</option>
+                        <option value="2">Layer 2</option>
+                        <option value="3">Layer 3</option>
+                        <option value="4">Layer 4</option>
+                        <option value="5">Layer 5</option>
                     </select>
                 </div>
             </div>
